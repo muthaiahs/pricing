@@ -1,14 +1,12 @@
 package com.pricing.appsrv.processor;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import com.pricing.appsrv.helper.PricingUtil;
 import com.pricing.common.model.PricingFeed;
 
 public class PricingProcessor {
@@ -20,108 +18,41 @@ public class PricingProcessor {
 
 	public List<PricingFeed> inputList = null;
 
-	public static void main(String args[]) {
+	public Map<String, Map<String, Double>> loadPricingFeedDetails() throws SQLException {
 
-		PricingProcessor test = new PricingProcessor();
-
-		test.loadPricingFeedDetails();
-
-	}
-
-	public Map<String, Map<String, Double>> loadPricingFeedDetails() {
-
-	//	Collection<PricingFeed> result = null;
+		Map<String, Map<String, Double>> result = null;
 		
-		Map<String, Map<String, Double>> result = null; 
-
-		Stream<PricingFeed> stream = inputList.stream();
-
-		System.out.println(" stream  :         " + stream);
-
-	//	result = inputList.stream().collect(Collectors.toList());
+		PricingUtil input = new PricingUtil();
+		
+		inputList = input.loadAllPricingFeed();
 
 		Map<String, List<PricingFeed>> test = inputList.stream().collect(
 				Collectors.groupingBy(PricingFeed::getStoreName));
 
 		System.out.println(" test  :         " + test);
 
-		Map<String, Map<String, List<PricingFeed>>> output = inputList
+		Map<String, Map<String, Double>> test1 = inputList
 				.stream()
 				.collect(Collectors.groupingBy(PricingFeed::getStoreName,
-						 Collectors.groupingBy(PricingFeed::getItemCategory
-						)));
-
-
-		System.out.println(" output  :         " + output);
-		
-
-
-		Double avg_price = null;
-
-	//	List<PricingFeed> pricingFeedList = output.get("TestStoreName1");
-		
-		
-
-		Map<String, Map<String, Double>> test1 = inputList.stream().collect(
-				Collectors.groupingBy(PricingFeed::getStoreName,Collectors.groupingBy(PricingFeed::getItemCategory, Collectors
-						.collectingAndThen(Collectors
-								.summarizingDouble(PricingFeed::getPrice),
-								dss -> dss.getAverage()))));
+										Collectors.groupingBy(	PricingFeed::getItemCategory,
+														Collectors.collectingAndThen(Collectors.summarizingDouble(PricingFeed::getPrice),
+																		dss -> dss.getAverage()))));
 
 		System.out.println(" test1  :         " + test1);
-		
-		Function<PricingFeed, List<Object>> keyExtractor = p ->  Arrays.<Object>asList(p.getStoreName() , p.getItemCategory() );
-		Map<Object, Object> test_1 = inputList.stream().collect(
-				Collectors.groupingBy( keyExtractor , Collectors
-						.collectingAndThen(Collectors
-								.summarizingDouble(PricingFeed::getPrice),
-								dss -> dss.getAverage())));
-
-		System.out.println(" test_1  :         " + test_1);
-		
-				
-	    Map< List<Object>, Object> aggregatedData = inputList.stream().collect(
-	      Collectors.groupingBy(keyExtractor,  Collectors
-					.collectingAndThen(Collectors
-							.summarizingDouble(PricingFeed::getPrice),
-							dss -> dss.getAverage())));
-	
-	    System.out.println(" output  :         " + aggregatedData  );
-	    System.out.println(" output  :         " + new ArrayList<>(aggregatedData.keySet()).get(0) );  
-	    System.out.println(" output  :         " + new ArrayList<>(aggregatedData.keySet()).get(0).size() );
-
-	    
-	    
-
-		/*
-		 * 
-		 * peopleByManyParams = people.collect(Collectors.groupingBy( p -> new
-		 * KeyObj(p.age, p.other1, p.other2), Collectors.mapping((Person p) ->
-		 * p, toList())));
-		 */
-
-		Integer[] numbersArray = new Integer[] { 1, 2, 3, 4, 5 };
-
-		System.out.println(Arrays.stream(numbersArray).collect(
-				Collectors.counting()));
-
-		System.out.println(Arrays.stream(numbersArray).collect(
-				Collectors.summingInt((Integer x) -> x)));
-
-		System.out.println(Arrays.stream(numbersArray).collect(
-				Collectors.averagingInt((Integer x) -> x)));
-
-		System.out.println(Arrays.stream(numbersArray)
-				.collect(Collectors.maxBy(Integer::compare)).get());
-
-		System.out.println(Arrays.stream(numbersArray)
-				.collect(Collectors.minBy(Integer::compare)).get());
-
-		System.out.println(Arrays.stream(numbersArray).collect(
-				Collectors.summarizingInt((Integer x) -> x)));
 
 		return result;
 	}
+	
+
+	public static void main(String args[]) throws SQLException {
+
+		PricingProcessor test = new PricingProcessor();
+
+		test.loadPricingFeedDetails();
+
+	}
+	
+	
 
 	private void setUp() {
 
