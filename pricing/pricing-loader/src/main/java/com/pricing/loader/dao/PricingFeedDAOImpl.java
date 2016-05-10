@@ -48,6 +48,7 @@ public class PricingFeedDAOImpl implements PricingFeedDAO {
 			}
 
 			int[] result = ps.executeBatch();
+			con.commit();
 
 			System.out.println(" result   :        " + result);
 
