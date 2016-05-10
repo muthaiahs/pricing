@@ -19,26 +19,26 @@ public class PricingProcessor {
 	public List<PricingFeed> inputList = null;
 
 	public Map<String, Map<String, Double>> loadPricingFeedDetails() throws SQLException {
-
-		Map<String, Map<String, Double>> result = null;
 		
-		PricingUtil input = new PricingUtil();
+	//	PricingUtil input = new PricingUtil();
 		
-		inputList = input.loadAllPricingFeed();
+	//	inputList = input.loadAllPricingFeed();
 
 		Map<String, List<PricingFeed>> test = inputList.stream().collect(
 				Collectors.groupingBy(PricingFeed::getStoreName));
 
 		System.out.println(" test  :         " + test);
 
-		Map<String, Map<String, Double>> test1 = inputList
+		Map<String, Map<String, Double>> result = inputList
 				.stream()
 				.collect(Collectors.groupingBy(PricingFeed::getStoreName,
 										Collectors.groupingBy(	PricingFeed::getItemCategory,
 														Collectors.collectingAndThen(Collectors.summarizingDouble(PricingFeed::getPrice),
 																		dss -> dss.getAverage()))));
 
-		System.out.println(" test1  :         " + test1);
+		System.out.println(" test1  :         " + result);
+		
+		
 
 		return result;
 	}
