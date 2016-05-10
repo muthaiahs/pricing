@@ -9,8 +9,8 @@ public class PricingFeed implements Serializable {
 	 */
 	private static final long serialVersionUID = -3941310764560195025L;
 
-	public PricingFeed(String itemId, String itemTitle, String storeName,
-			String itemCategory, String itemSubCategory, Double price) {
+	public PricingFeed(String itemId, String itemTitle, String storeName, 
+			 Double price ,  String itemCategory, String itemSubCategory  ) {  
 
 		this.itemId = itemId;
 		this.itemTitle = itemTitle;
