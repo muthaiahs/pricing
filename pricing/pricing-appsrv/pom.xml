@@ -72,11 +72,13 @@
 		</dependency>
 
 
+<!-- 	
 		<dependency>
 			<groupId>com.test.pricing</groupId>
 			<artifactId>pricing-common</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+			 -->
 	</dependencies>
 
 
